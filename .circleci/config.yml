@@ -1,22 +1,41 @@
 version: 2.1
 
-jobs:
-  say-hello:
+executors:
+  docker-executor:
     docker:
-      - image: cimg/base:current
+      - image: circleci/python:3.9
+    working_directory: ~/repo
 
+jobs:
+  build:
+    executor: docker-executor
     steps:
       - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
       - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
+          name: Build Docker Image
+          command: |
+            docker build -t blairk336/alu_project:latest .
+      - run:
+          name: Verify Docker Image Build
+          command: |
+            docker images
+      - run:
+          name: Login to Docker Hub
+          command: |
+            echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+      - run:
+          name: Push Docker Image to Docker Hub
+          command: |
+            docker push blairk336/alu_project:latest
 
 workflows:
   version: 2
   deploy:
     jobs:
-      - say-hello:
+      - build:
           filters:
             branches:
               only:
-                - master  # This ensures the job runs only on the 'master' branch
+                - dev
