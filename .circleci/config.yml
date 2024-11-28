@@ -15,8 +15,8 @@ workflows:
   version: 2
   deploy:
     jobs:
-      - say-hello
-    filters:
-      branches:
-        only:
-          - master
+      - say-hello:
+          filters:
+            branches:
+              only:
+                - master  # This ensures the job runs only on the 'master' branch
