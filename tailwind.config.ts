@@ -7,7 +7,12 @@ export default {
 	content: ['./src/**/*.{html,js,svelte,ts}'],
 
 	theme: {
-		extend: {}
+		extend: {
+			colors: {
+				primary_cream: '#D7D3BF',
+				secondary_cream: '#FFF0D1'
+			}
+		}
 	},
 
 	plugins: [typography, forms, containerQueries]

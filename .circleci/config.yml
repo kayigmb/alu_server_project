@@ -14,9 +14,15 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
+          name: Create .env file
+          command: |
+            echo "PUBLIC_SUPABASE_URL=${PUBLIC_SUPABASE_URL}" >> .env
+            echo "PUBLIC_SUPABASE_ANON_KEY=${PUBLIC_SUPABASE_ANON_KEY}" >> .env
+            echo "PUBLIC_SUPABASE_SERVICE=${PUBLIC_SUPABASE_SERVICE}" >> .env
+      - run:
           name: Build Docker Image
           command: |
-            docker build -t blairk336/alu_project:latest .
+            docker build --build-arg ENV_FILE=.env -t blairk336/alu_project:latest .
       - run:
           name: Verify Docker Image Build
           command: |
